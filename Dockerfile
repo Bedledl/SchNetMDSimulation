@@ -32,4 +32,3 @@ RUN chown ${USERNAME}:jusers $WORKDIR
 RUN chmod a+xrw -R $WORKDIR
 
 RUN mkdir /home/riedl1/md_workdir
-RUN mkdir /home/riedl1/md_workdir
