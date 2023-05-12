@@ -28,5 +28,5 @@ RUN cp -r /opt/src ${WORKDIR}/src  \
 
 RUN pip3 install -r ${WORKDIR}/requirements.txt
 
-#RUN chown ${USERNAME}:jusers $WORKDIR
-#RUN chmod u+xrw -R $WORKDIR
+RUN chown ${USERNAME}:jusers $WORKDIR
+RUN chmod a+xrw -R $WORKDIR
