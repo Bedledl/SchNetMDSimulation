@@ -5,11 +5,12 @@ import torch
 
 from ase.io import read
 
+from schnetpack import properties
 from schnetpack.md import System, UniformInit, Simulator
 from schnetpack.md.calculators import SchNetPackCalculator
 from schnetpack.md.integrators import VelocityVerlet
 from schnetpack.md.neighborlist_md import NeighborListMD
-from schnetpack.md.simulation_hooks import MoleculeStream, FileLogger
+from schnetpack.md.simulation_hooks import MoleculeStream, FileLogger, PropertyStream
 from schnetpack.md.simulation_hooks.thermostats import LangevinThermostat
 from schnetpack.transform import ASENeighborList
 
@@ -83,8 +84,8 @@ class MDSimulations:
             buffer_size = 100
             # Set up data streams to store positions, momenta and the energy
             data_streams = [
-                MoleculeStream(store_velocities=True)
-#                callback_hooks.PropertyStream(target_properties=[properties.energy]),
+                MoleculeStream(store_velocities=True),
+                PropertyStream(target_properties=[properties.energy]),
             ]
 
             file_logger = FileLogger(

@@ -1,3 +1,3 @@
 
 
-MD_WORKDIR = "../md_workdir"
+WORKDIR = "/home/betti/masterarbeit/SchNetMDSimulation/md_workdir"
