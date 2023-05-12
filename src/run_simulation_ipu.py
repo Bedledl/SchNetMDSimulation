@@ -1,8 +1,8 @@
 import os
 
 from schnetpack.md.simulation_hooks import LangevinThermostat
-from src.constants import WORKDIR
-from src.ethanol_simulation import EthanolSimulation
+from constants import WORKDIR
+from ethanol_simulation import EthanolSimulation
 
 thermostats = [
 #    LangevinThermostat(10, 10),

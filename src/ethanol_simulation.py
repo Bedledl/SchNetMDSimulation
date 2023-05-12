@@ -6,7 +6,7 @@ from typing import List
 
 from schnetpack.md.simulation_hooks import LangevinThermostat
 from simulation import MDSimulations
-from src.constants import WORKDIR
+from constants import WORKDIR
 
 
 class EthanolSimulation:
