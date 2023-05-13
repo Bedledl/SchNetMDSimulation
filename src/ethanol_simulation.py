@@ -1,12 +1,10 @@
-import os.path
-
 import torch
 
 from typing import List
 
 from schnetpack.md.simulation_hooks import LangevinThermostat
 from simulation import MDSimulations
-from src.constants import WORKDIR
+from constants import WORKDIR
 
 
 class EthanolSimulation:
@@ -23,8 +21,8 @@ class EthanolSimulation:
 
         simulation = MDSimulations(
             device,
-            "/home/betti/masterarbeit/schnetpack/tests/testdata/md_ethanol.model",
-            "/home/betti/masterarbeit/schnetpack/tests/testdata/md_ethanol.xyz",
+            "../test/md_ethanol.model",
+            "../test/md_ethanol.xyz",
             WORKDIR,
             1,
             300,
