@@ -42,20 +42,3 @@ class EthanolSimulation:
         print("Start simulation")
         simulation.start_simulation(steps)
         print("finnish simulation")
-
-
-thermostats = [
-    LangevinThermostat(10, 10),
-    LangevinThermostat(300, 10),
-    LangevinThermostat(500, 10),
-    LangevinThermostat(1000, 10)
-]
-
-log_files = [
-    os.path.join(WORKDIR, "log_thermostat_10"),
-    os.path.join(WORKDIR, "log_thermostat_300"),
-    os.path.join(WORKDIR, "log_thermostat_500"),
-    os.path.join(WORKDIR, "log_thermostat_1000")
-]
-
-EthanolSimulation(thermostats, log_files, "cpu", 100)
