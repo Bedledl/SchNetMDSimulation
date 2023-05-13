@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Type
 
 import torch
 
@@ -31,7 +31,8 @@ class MDSimulations:
                  cutoff_shell: float, # Angstrom z.B. 2.0
                  simulation_precision: torch.dtype, # z.B. torch.float32
                  thermostats: List[LangevinThermostat],
-                 log_files: List[str]
+                 log_files: List[str],
+                 calculator_class: Type[SchNetPackCalculator]
                  ):
         MDSimulations.__check_input(model_path, molecule_path, md_workdir, device, thermostats, log_files)
 
@@ -50,7 +51,7 @@ class MDSimulations:
         # the task of the integrator is, to update momenta and atom positions
         md_integrator = VelocityVerlet(time_step)
 
-        md_calculator = SchNetPackCalculator(
+        md_calculator = calculator_class(
             model_path,  # path to stored model
             "forces",  # force key
             "kcal/mol",  # energy units
