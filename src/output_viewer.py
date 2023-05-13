@@ -4,7 +4,7 @@ from schnetpack.md.data import HDF5Loader
 import numpy as np
 import matplotlib.pyplot as plt
 from schnetpack import units as spk_units, properties
-from src.constants import WORKDIR
+from constants import WORKDIR
 
 
 def show_logfile(log_file: str):
