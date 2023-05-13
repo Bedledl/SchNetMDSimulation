@@ -1,3 +1,3 @@
 
 
-WORKDIR = "~/md_workdir"
+WORKDIR = "../md_workdir"

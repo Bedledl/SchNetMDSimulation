@@ -112,6 +112,8 @@ class MDSimulations:
                 simulator_hooks=simulator_hooks
             )
 
+            md_simulator.float()
+            md_simulator.apply(lambda t: t.to(torch.int32) if t.dtype == torch.int64 else t)
             md_simulator.to(device=device, dtype=simulation_precision)
 
             self.__md_simulations.append(md_simulator)
