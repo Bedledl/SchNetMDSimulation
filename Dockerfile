@@ -12,10 +12,10 @@ ENV WORKDIR=/home/${USERNAME}
 # workdir creates directory, if it doesn't already exist
 WORKDIR $WORKDIR
 
-RUN apt-get update && apt-get install python3.8-venv -y
+#RUN apt-get update && apt-get install python3.8-venv -y
 
-RUN python3 -m venv mdSimEnv
-RUN . mdSimEnv/bin/activate
+#RUN python3 -m venv mdSimEnv
+#RUN . mdSimEnv/bin/activate
 
 # copy code
 # this should propably be at the end of the dockerfile,
