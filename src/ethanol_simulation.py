@@ -34,7 +34,7 @@ class EthanolSimulation:
             0.5,
             5.0,
             2.0,
-            torch.float64,
+            torch.float32,
             thermostats,
             log_files,
             calc_cls
