@@ -1,4 +1,5 @@
 hydra-core==1.3.2
 numpy==1.23.5
 ase==3.22.1
-schnetpack==2.0.3
+torch_geometric
+schnetpack @ git+https://github.com/Bedledl/schnetpack_ipu.git@ipu_compatibility
