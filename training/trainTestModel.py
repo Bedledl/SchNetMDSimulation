@@ -8,10 +8,11 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
+#import poptorch
+
 forcetut = './forcetut'
 if not os.path.exists(forcetut):
     os.makedirs(forcetut)
-
 
 from schnetpack.datasets import MD17
 
@@ -41,6 +42,7 @@ print('Shape:\n', properties[MD17.forces].shape)
 cutoff = 5.
 n_atom_basis = 30
 
+
 pairwise_distance = spk.atomistic.PairwiseDistances() # calculates pairwise distances between atoms
 radial_basis = spk.nn.GaussianRBF(n_rbf=20, cutoff=cutoff)
 schnet = spk.representation.SchNet(
@@ -64,8 +66,6 @@ nnpot = spk.model.NeuralNetworkPotential(
 )
 
 
-
-
 output_energy = spk.task.ModelOutput(
     name=MD17.energy,
     loss_fn=torch.nn.MSELoss(),
@@ -84,14 +84,15 @@ output_forces = spk.task.ModelOutput(
     }
 )
 
+
 task = spk.task.AtomisticTask(
     model=nnpot,
     outputs=[output_energy, output_forces],
-    optimizer_cls=torch.optim.AdamW,
+    optimizer_cls=torch.optim.Adam,
     optimizer_args={"lr": 1e-4}
 )
 
-logger = pl.loggers.TensorBoardLogger(save_dir=forcetut)
+
 callbacks = [
     spk.train.ModelCheckpoint(
         model_path=os.path.join(forcetut, "best_inference_model"),
@@ -100,10 +101,18 @@ callbacks = [
     )
 ]
 
-trainer = pl.Trainer(
-    callbacks=callbacks,
-    logger=logger,
-    default_root_dir=forcetut,
-    max_epochs=5, # for testing, we restrict the number of epochs
-)
-trainer.fit(task, datamodule=ethanol_data)
+task = task.train()
+
+dataloader = ethanol_data.train_dataloader()
+
+
+
+#loader = poptorch.dataload.FixedSizeDataLoader(ethanol_data.dataset, batch_size=8)
+#model = nnpot.train()
+#optimizer = poptorch.optim.Adam(model.parameters(), lr=0.001)
+#poptorch_model = poptorch.trainingModel(model, optimizer=optimizer)
+
+
+for batch in dataloader:
+    task.training_step(batch, batch["_idx"])
+
