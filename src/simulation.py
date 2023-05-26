@@ -114,7 +114,7 @@ class MDSimulations:
 
             #md_simulator.float()
             #md_simulator._apply(lambda t: t.to(torch.int32) if t.long() else t)
-            md_simulator.to(device=device, dtype=simulation_precision)
+            #md_simulator.to(device=device, dtype=simulation_precision)
 
             self.__md_simulations.append(md_simulator)
 
