@@ -34,6 +34,7 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
             script_model
         )
 
+        self.model.eval()
         self.ipu_executor = poptorch.inferenceModel(self.model)
 
     def calculate(self, system: System):
