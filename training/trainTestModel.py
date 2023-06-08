@@ -10,6 +10,8 @@ import numpy as np
 
 #import poptorch
 
+from schnetpack import properties as mol_prop
+
 forcetut = './forcetut'
 if not os.path.exists(forcetut):
     os.makedirs(forcetut)
@@ -28,7 +30,7 @@ ethanol_data = MD17(
         trn.CastTo32()
     ],
     num_workers=1,
-    pin_memory=True, # set to false, when not using a GPU
+    pin_memory=False, # set to false, when not using a GPU
 )
 ethanol_data.prepare_data()
 ethanol_data.setup()
@@ -40,7 +42,7 @@ print('Forces:\n', properties[MD17.forces])
 print('Shape:\n', properties[MD17.forces].shape)
 
 cutoff = 5.
-n_atom_basis = 30
+n_atom_basis = 1
 
 
 pairwise_distance = spk.atomistic.PairwiseDistances() # calculates pairwise distances between atoms
@@ -83,7 +85,7 @@ output_forces = spk.task.ModelOutput(
         "MAE": torchmetrics.MeanAbsoluteError()
     }
 )
-
+print("task")
 
 task = spk.task.AtomisticTask(
     model=nnpot,
@@ -92,7 +94,7 @@ task = spk.task.AtomisticTask(
     optimizer_args={"lr": 1e-4}
 )
 
-
+print("model callbacks")
 callbacks = [
     spk.train.ModelCheckpoint(
         model_path=os.path.join(forcetut, "best_inference_model"),
@@ -101,8 +103,10 @@ callbacks = [
     )
 ]
 
+print("train")
 task = task.train()
 
+print("data loader")
 dataloader = ethanol_data.train_dataloader()
 
 
@@ -113,6 +117,12 @@ dataloader = ethanol_data.train_dataloader()
 #poptorch_model = poptorch.trainingModel(model, optimizer=optimizer)
 
 
+print("training loop")
 for batch in dataloader:
-    task.training_step(batch, batch["_idx"])
+    print("loop")
+    idx_m = batch[mol_prop.idx_m]
+    n_molecules = int(idx_m[-1]) + 1
+    print(n_molecules)
+    batch[mol_prop.n_molecules] = torch.zeros(n_molecules)
+    task.training_step(batch, batch[mol_prop.idx_m])
 

@@ -22,6 +22,7 @@ class SimpleAdder(nn.Module):
     def forward(self, x, gt):
         print(x.is_leaf)
         y = self.il(x)
+        y[len(gt)-2] = 0
         x = self.il(x)
         y = self.ol(y)
         print(x.is_leaf)
@@ -46,7 +47,8 @@ t2 = torch.randn(3, 1)
 print(t1)
 print(t2)
 #print(model(t1, t2))
-print(inference_model(t1, t2))
+e = inference_model(t1, t2)
+print(e)
 print("Success")
 
 

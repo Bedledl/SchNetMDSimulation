@@ -49,6 +49,10 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         Args:
             system (schnetpack.md.System): System object containing current state of the simulation.
         """
+        print("SchNetPackIPU Calculator calculate begin")
         inputs = self._generate_input(system)
+        print("SchNetPackIPU Calculator calculate after generate input")
         self.results = self.ipu_executor(inputs)
+        print("SchNetPackIPU Calculator calculate ipu executor(inputs)")
         self._update_system(system)
+        print("SchNetPackIPU Calculator calculate update system")
