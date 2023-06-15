@@ -26,14 +26,14 @@ class EthanolSimulation:
 
         simulation = MDSimulations(
             device,
-            "../test/md_ethanol.model",
+            "/mnt/masterarbeit/SchNetMDSimulation/training/forcetut/best_inference_model",
             "../test/md_ethanol.xyz",
             WORKDIR,
             1,
             300,
             0.5,
-            5.0,
-            2.0,
+            5,
+            0,
             torch.float32,
             thermostats,
             log_files,

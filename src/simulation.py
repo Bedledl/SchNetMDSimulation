@@ -12,7 +12,7 @@ from schnetpack.md.integrators import VelocityVerlet
 from schnetpack.md.neighborlist_md import NeighborListMD
 from schnetpack.md.simulation_hooks import MoleculeStream, FileLogger, PropertyStream
 from schnetpack.md.simulation_hooks.thermostats import LangevinThermostat
-from schnetpack.transform import ASENeighborList
+from schnetpack.transform import KNNNeighborList, ASENeighborList
 
 
 class MDSimulations:
@@ -45,7 +45,7 @@ class MDSimulations:
         md_neighborlist = NeighborListMD(
             cutoff,
             cutoff_shell,
-            ASENeighborList,
+            KNNNeighborList,
         )
 
         # the task of the integrator is, to update momenta and atom positions
