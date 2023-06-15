@@ -123,6 +123,8 @@ class MDSimulations:
         # how do i run multiple simulations at once?
         for sim in self.__md_simulations:
             sim.simulate(n_steps)
+            print(f"The IPU calculated {sim.calculator.steps} steps in {sim.calculator.d} seconds.")
+            print(f"This is one step in {sim.calculator.d / sim.calculator.steps} seconds")
 
     @staticmethod
     def __check_input(model_path: str,

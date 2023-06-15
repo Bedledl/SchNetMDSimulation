@@ -6,6 +6,8 @@ from schnetpack.md import System
 from schnetpack.md.calculators import SchNetPackCalculator
 from schnetpack.md.neighborlist_md import NeighborListMD
 
+from datetime import datetime
+
 
 class SchNetPackCalcIpu(SchNetPackCalculator):
     def __init__(
@@ -35,6 +37,9 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         )
 
         self.model.eval()
+        t = datetime.now()
+        self.d = t - t
+        self.steps = 0
         self.ipu_executor = poptorch.inferenceModel(self.model)
 
     def calculate(self, system: System):
@@ -50,5 +55,9 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
             system (schnetpack.md.System): System object containing current state of the simulation.
         """
         inputs = self._generate_input(system)
+        a = datetime.now()
         self.results = self.ipu_executor(inputs)
+        b = datetime.now()
+        self.d += b-a
+        self.steps += 1
         self._update_system(system)
