@@ -1,6 +1,7 @@
 from typing import Union, List, Dict
 
 import poptorch
+import torch
 
 from schnetpack.md import System
 from schnetpack.md.calculators import SchNetPackCalculator
@@ -39,6 +40,7 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         self.model.eval()
         t = datetime.now()
         self.d = t - t
+        self.d_neighborlist = t - t
         self.steps = 0
         self.ipu_executor = poptorch.inferenceModel(self.model)
 
@@ -61,3 +63,22 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         self.d += b-a
         self.steps += 1
         self._update_system(system)
+
+    def _generate_input(self, system: System) -> Dict[str, torch.Tensor]:
+        """
+        Function to extracts neighbor lists, atom_types, positions e.t.c. from the system and generate a properly
+        formatted input for the schnetpack model.
+
+        Args:
+            system (schnetpack.md.System): System object containing current state of the simulation.
+
+        Returns:
+            dict(torch.Tensor): Schnetpack inputs in dictionary format.
+        """
+        inputs = self._get_system_molecules(system)
+        a = datetime.now()
+        neighbors = self.neighbor_list.get_neighbors(inputs)
+        b = datetime.now()
+        self.d_neighborlist += b - a
+        inputs.update(neighbors)
+        return inputs

@@ -12,7 +12,7 @@ from schnetpack.md.integrators import VelocityVerlet
 from schnetpack.md.neighborlist_md import NeighborListMD
 from schnetpack.md.simulation_hooks import MoleculeStream, FileLogger, PropertyStream
 from schnetpack.md.simulation_hooks.thermostats import LangevinThermostat
-from schnetpack.transform import KNNNeighborList, ASENeighborList
+from schnetpack.transform import KNNNeighborList, ASENeighborList, CompleteNeighborList
 
 
 class MDSimulations:
@@ -45,7 +45,7 @@ class MDSimulations:
         md_neighborlist = NeighborListMD(
             cutoff,
             cutoff_shell,
-            KNNNeighborList,
+            CompleteNeighborList,
         )
 
         # the task of the integrator is, to update momenta and atom positions
@@ -125,6 +125,8 @@ class MDSimulations:
             sim.simulate(n_steps)
             print(f"The IPU calculated {sim.calculator.steps} steps in {sim.calculator.d} seconds.")
             print(f"This is one step in {sim.calculator.d / sim.calculator.steps} seconds")
+            print(f"The IPU needed  {sim.calculator.d_neighborlist} seconds for neighborlist calculations.")
+            print(f"This is one neighborlist calculation in  {sim.calculator.d_neighborlist/ sim.calculator.steps} seconds")
 
     @staticmethod
     def __check_input(model_path: str,
