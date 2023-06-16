@@ -1,11 +1,11 @@
 from typing import Union, List, Dict
 
 import poptorch
-import torch
 
 from schnetpack.md import System
 from schnetpack.md.calculators import SchNetPackCalculator
 from schnetpack.md.neighborlist_md import NeighborListMD
+from schnetpack.properties import n_molecules
 
 
 class SchNetPackCalcIpu(SchNetPackCalculator):
@@ -53,3 +53,7 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         self.results = self.ipu_executor(inputs)
         self._update_system(system)
 
+    def _get_system_molecules(self, system: System):
+        inputs = super(SchNetPackCalcIpu, self)._get_system_molecules()
+        inputs[n_molecules] = system.n_molecules
+        return inputs
