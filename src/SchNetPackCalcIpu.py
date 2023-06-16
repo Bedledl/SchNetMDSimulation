@@ -1,5 +1,7 @@
 from typing import Union, List, Dict
 
+from schnetpack.properties import idx_i, idx_j, offsets
+
 import poptorch
 import torch
 
@@ -64,6 +66,11 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         self.steps += 1
         self._update_system(system)
 
+        n_atoms = system.n_atoms
+        self.idx_i = torch.arange(n_atoms).repeat_interleave(n_atoms)
+        self.idx_j = torch.arange(n_atoms).repeat(n_atoms)
+        self.offsets = torch.tensor([[0, 0, 0]]).repeat(n_atoms * n_atoms, 1)
+
     def _generate_input(self, system: System) -> Dict[str, torch.Tensor]:
         """
         Function to extracts neighbor lists, atom_types, positions e.t.c. from the system and generate a properly
@@ -77,7 +84,12 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         """
         inputs = self._get_system_molecules(system)
         a = datetime.now()
-        neighbors = self.neighbor_list.get_neighbors(inputs)
+        neighbors = {
+            idx_i: self.idx_i,
+            idx_j: self.idx_j,
+            offsets: self.offsets
+        }
+        #neighbors = self.neighbor_list.get_neighbors(inputs)
         b = datetime.now()
         self.d_neighborlist += b - a
         inputs.update(neighbors)
