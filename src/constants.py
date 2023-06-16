@@ -1,0 +1,3 @@
+
+
+WORKDIR = "../md_workdir"
