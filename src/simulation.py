@@ -44,7 +44,7 @@ class MDSimulations:
         md_neighborlist = NeighborListMD(
             cutoff,
             cutoff_shell,
-            CompleteNeighborList,
+            KNNNeighborList,
         )
 
         # the task of the integrator is, to update momenta and atom positions
