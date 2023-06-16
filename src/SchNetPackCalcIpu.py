@@ -45,6 +45,11 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         self.d_neighborlist = t - t
         self.steps = 0
         self.ipu_executor = poptorch.inferenceModel(self.model)
+        self.compiled = False
+        n_atoms = 9
+        self.idx_i = torch.arange(n_atoms).repeat_interleave(n_atoms)
+        self.idx_j = torch.arange(n_atoms).repeat(n_atoms)
+        self.offsets = torch.tensor([[0, 0, 0]]).repeat(n_atoms * n_atoms, 1)
 
     def calculate(self, system: System):
         """
@@ -65,11 +70,6 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         self.d += b-a
         self.steps += 1
         self._update_system(system)
-
-        n_atoms = system.n_atoms
-        self.idx_i = torch.arange(n_atoms).repeat_interleave(n_atoms)
-        self.idx_j = torch.arange(n_atoms).repeat(n_atoms)
-        self.offsets = torch.tensor([[0, 0, 0]]).repeat(n_atoms * n_atoms, 1)
 
     def _generate_input(self, system: System) -> Dict[str, torch.Tensor]:
         """
