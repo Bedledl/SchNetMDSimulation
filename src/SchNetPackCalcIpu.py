@@ -1,11 +1,12 @@
 from typing import Union, List, Dict
 
 import poptorch
+import torch
 
 from schnetpack.md import System
 from schnetpack.md.calculators import SchNetPackCalculator
 from schnetpack.md.neighborlist_md import NeighborListMD
-from schnetpack.properties import n_molecules
+from schnetpack.properties import n_molecules, idx_i, idx_j, offsets
 
 
 class SchNetPackCalcIpu(SchNetPackCalculator):
@@ -36,6 +37,9 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         )
 
         self.ipu_executor = poptorch.inferenceModel(self.model)
+        self.idx_i = None
+        self.idx_j = None
+        self.offsets = None
 
     def calculate(self, system: System):
         """
@@ -54,6 +58,18 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         self._update_system(system)
 
     def _get_system_molecules(self, system: System):
-        inputs = super(SchNetPackCalcIpu, self)._get_system_molecules()
+        inputs = super(SchNetPackCalcIpu, self)._get_system_molecules(system)
         inputs[n_molecules] = system.n_molecules
+
+        n_atoms = system.total_n_atoms
+        if self.idx_i is None:
+            self.idx_i = torch.arange(n_atoms).repeat_interleave(n_atoms)
+        if self.idx_j is None:
+            self.idx_j = torch.arange(n_atoms).repeat(n_atoms)
+        if self.offsets is None:
+            self.offsets = torch.tensor([[0, 0, 0]]).repeat(n_atoms * n_atoms, 1)
+
+        inputs[idx_i] = self.idx_i
+        inputs[idx_j] = self.idx_j
+        inputs[offsets] = self.offsets
         return inputs
