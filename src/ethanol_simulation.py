@@ -1,12 +1,11 @@
 import torch
 
-from typing import List
+from typing import List, Type
 
 from schnetpack.md.calculators import SchNetPackCalculator
 from schnetpack.md.simulation_hooks import LangevinThermostat
 from simulation import MDSimulations
 from constants import WORKDIR
-from SchNetPackCalcIpu import SchNetPackCalcIpu
 
 
 class EthanolSimulation:
@@ -19,10 +18,9 @@ class EthanolSimulation:
                  log_files: List[str],
                  device: torch.device,
                  steps,
-                 run_inference_on_ipu
+                 calculator_class: Type[SchNetPackCalculator],
                  ):
 
-        calc_cls = SchNetPackCalcIpu if run_inference_on_ipu else SchNetPackCalculator
 
         simulation = MDSimulations(
             device,
