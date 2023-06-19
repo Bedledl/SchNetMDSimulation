@@ -17,12 +17,10 @@ class EthanolSimulation:
                  thermostats: List[LangevinThermostat],
                  log_files: List[str],
                  device: torch.device,
-                 steps,
                  calculator_class: Type[SchNetPackCalculator],
                  ):
 
-
-        simulation = MDSimulations(
+        self.simulation = MDSimulations(
             device,
             "../training/forcetut/best_inference_model",
             "../test/md_ethanol.xyz",
@@ -34,8 +32,10 @@ class EthanolSimulation:
             0,
             thermostats,
             log_files,
-            calc_cls
+            calculator_class,
         )
+
+    def start_simulation(self, steps):
         print("Start simulation")
-        simulation.start_simulation(steps)
+        self.simulation.start_simulation(steps)
         print("Finnish simulation")

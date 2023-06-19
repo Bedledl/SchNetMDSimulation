@@ -16,9 +16,9 @@ log_files = [
     os.path.join(WORKDIR, "log_thermostat_300")
 ]
 
+ethanol_simulation = EthanolSimulation(thermostats, log_files, torch.device("ipu"), SchNetPackCalcIpu)
+
 start_ipu = datetime.datetime.now()
-
-EthanolSimulation(thermostats, log_files, torch.device("ipu"), 1000, SchNetPackCalcIpu)
-
+ethanol_simulation.start_simulation(1000)
 end_ipu = datetime.datetime.now()
 print(f"The whole simulation(with compilation) took: {end_ipu - start_ipu} seconds")

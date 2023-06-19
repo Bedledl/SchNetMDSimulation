@@ -17,4 +17,6 @@ log_files = [
     os.path.join(WORKDIR, "log_thermostat_300")
 ]
 
-EthanolSimulation(thermostats, log_files, torch.device("cpu"), 5, SchNetPackCalculator)
+ethanol_simulation = EthanolSimulation(
+    thermostats, log_files, torch.device("cpu"), SchNetPackCalculator)
+ethanol_simulation.start_simulation(10)
