@@ -13,6 +13,7 @@ from schnetpack.md.neighborlist_md import NeighborListMD
 from schnetpack.md.simulation_hooks import MoleculeStream, FileLogger, PropertyStream
 from schnetpack.md.simulation_hooks.thermostats import LangevinThermostat
 from schnetpack.transform import KNNNeighborList, ASENeighborList, CompleteNeighborList
+from SchNetPackCalcIpu import MultiSimCalc
 
 
 class MDSimulations:
@@ -31,7 +32,8 @@ class MDSimulations:
                  cutoff_shell: float, # Angstrom z.B. 2.0
                  thermostats: List[LangevinThermostat],
                  log_files: List[str],
-                 calculator_class: Type[SchNetPackCalculator]
+                 calculator_class: Type[SchNetPackCalculator],
+                 pipe_endpoint=None,
                  ):
         MDSimulations.__check_input(model_path, molecule_path, md_workdir, device, thermostats, log_files)
 
@@ -50,15 +52,27 @@ class MDSimulations:
         # the task of the integrator is, to update momenta and atom positions
         md_integrator = VelocityVerlet(time_step)
 
-        md_calculator = calculator_class(
-            model_path,  # path to stored model
-            "forces",  # force key
-            "kcal/mol",  # energy units
-            "Angstrom",  # length units
-            md_neighborlist,  # neighbor list
-            energy_key="energy",  # name of potential energies
-            required_properties=[],  # additional properties extracted from the model
-        )
+        if calculator_class is MultiSimCalc:
+            md_calculator = calculator_class(
+                model_path,  # path to stored model
+                "forces",  # force key
+                "kcal/mol",  # energy units
+                "Angstrom",  # length units
+                md_neighborlist,  # neighbor list
+                energy_key="energy",  # name of potential energies
+                required_properties=[],  # additional properties extracted from the model
+                pipe_endpoint=pipe_endpoint
+            )
+        else:
+            md_calculator = calculator_class(
+                model_path,  # path to stored model
+                "forces",  # force key
+                "kcal/mol",  # energy units
+                "Angstrom",  # length units
+                md_neighborlist,  # neighbor list
+                energy_key="energy",  # name of potential energies
+                required_properties=[]  # additional properties extracted from the model
+            )
 
         molecule = read(molecule_path)
 

@@ -18,6 +18,7 @@ class EthanolSimulation:
                  log_files: List[str],
                  device: torch.device,
                  calculator_class: Type[SchNetPackCalculator],
+                 pipe_endpoint=None,
                  ):
 
         self.simulation = MDSimulations(
@@ -33,6 +34,7 @@ class EthanolSimulation:
             thermostats,
             log_files,
             calculator_class,
+            pipe_endpoint=pipe_endpoint,
         )
 
     def start_simulation(self, steps):
