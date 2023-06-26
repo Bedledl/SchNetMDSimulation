@@ -57,8 +57,8 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
         self.results = self.ipu_executor(inputs)
         self._update_system(system)
 
-    def _get_system_molecules(self, system: System):
-        inputs = super(SchNetPackCalcIpu, self)._get_system_molecules(system)
+    def _generate_input(self, system: System) -> Dict[str, torch.Tensor]:
+        inputs = super(SchNetPackCalcIpu, self)._generate_input(system)
         inputs[n_molecules] = system.n_molecules
 
         n_atoms = system.total_n_atoms
