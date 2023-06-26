@@ -1,5 +1,6 @@
 import datetime
 import os
+from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from multiprocessing import Pipe, Process, Pool
 
@@ -64,8 +65,7 @@ model = model.eval()
 
 ipu_executor = poptorch.inferenceModel(model)
 
-
-with Pool(len(temperatures)) as pool:
+with ThreadPoolExecutor(max_workers=len(temperatures)) as pool:
     start_simulation_n_steps = partial(EthanolSimulation.start_simulation, steps=steps)
     pool.map(start_simulation_n_steps, simulation_objects)
 
