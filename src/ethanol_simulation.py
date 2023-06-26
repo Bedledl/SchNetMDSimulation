@@ -24,7 +24,8 @@ class EthanolSimulation:
         self.simulation = MDSimulations(
             device,
             "../training/forcetut/best_inference_model",
-            "../test/md_ethanol.xyz",
+            #"../test/md_ethanol.xyz",
+            "../test/alpha_lactalbumin.pdb",
             WORKDIR,
             1,
             300,

@@ -4,6 +4,7 @@ from typing import List, Type
 import torch
 
 from ase.io import read
+from ase.io.proteindatabank import read_proteindatabank
 
 from schnetpack import properties
 from schnetpack.md import System, UniformInit, Simulator
@@ -74,7 +75,8 @@ class MDSimulations:
                 required_properties=[]  # additional properties extracted from the model
             )
 
-        molecule = read(molecule_path)
+        #molecule = read(molecule_path)
+        molecule = read_proteindatabank(molecule_path)
 
         for thermostat, log_file in zip(thermostats, log_files):
             # The System instance stores the state (molecule positions, forces, momenta...) of the syste
