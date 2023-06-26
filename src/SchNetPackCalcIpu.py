@@ -35,7 +35,7 @@ class SchNetPackCalcIpu(SchNetPackCalculator):
             property_conversion,
             script_model
         )
-
+        self.model.to(torch.float32)
         self.ipu_executor = poptorch.inferenceModel(self.model)
         self.idx_i = None
         self.idx_j = None
