@@ -47,7 +47,7 @@ simulation_objects = [
 model_file = "../training/forcetut/best_inference_model"
 print("Loading model from {:s}".format(model_file))
 # load model and keep it on CPU, device can be changed afterwards
-model = torch.load(model_file, map_location="cpu").to(torch.float64)
+model = torch.load(model_file, map_location="cpu").to(torch.float32)
 
 # from schnetpack.md.calculators.schnetpack_calculator.SchNetPackCalculator._deactivate_postprocessing
 if hasattr(model, "postprocessors"):
