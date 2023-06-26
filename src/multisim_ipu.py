@@ -63,7 +63,11 @@ model.do_postprocessing = False
 
 model = model.eval()
 
-ipu_executor = poptorch.inferenceModel(model)
+opts = poptorch.Options()
+opts.modelName(f"multisim_{date}")
+opts.enableProfiling("reports")
+
+ipu_executor = poptorch.inferenceModel(model, opts)
 
 with ThreadPoolExecutor(max_workers=len(temperatures)) as pool:
     start_simulation_n_steps = partial(EthanolSimulation.start_simulation, steps=steps)
