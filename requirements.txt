@@ -9,3 +9,4 @@ torchmd-cg
 torchmd-net @ git+https://github.com/torchmd/torchmd-net.git
 seaborn
 torch_cluster
+torchmd-net-legacy @ git+https://github.com/torchmd/torchmd-net-legacy
