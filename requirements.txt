@@ -6,7 +6,7 @@ torch-scatter
 schnetpack @ git+https://github.com/Bedledl/schnetpack_ipu.git@ipu_compatibility
 torchmd==1.0.0
 torchmd-cg
-torchmd-net @ git+https://github.com/torchmd/torchmd-net.git
+torchmd-net @ git+https://github.com/Bedledl/torchmd-net-ipu.git
 seaborn
 torch_cluster
-torchmd-net-legacy @ git+https://github.com/torchmd/torchmd-net-legacy
+pytorch-lightning==1.9
